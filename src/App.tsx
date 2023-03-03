@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux/es/exports';
 import { selectAllUsers } from './features/users/selector';
@@ -8,12 +8,19 @@ import { userActions } from './features/users/reducer';
 import { productActions } from './features/products/reducer';
 import { UserType } from './features/users/model';
 import { ProductType } from './features/products/model';
+import { selectAreProductsLoading } from './features/loading/selector';
 
 function App() {
   const [userCount, setUserCount] = useState(0)
   const [productCount, setProductCount] = useState(0)
 
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(productActions.fetchProducts())
+  }, [dispatch])
+
+  const isLoading = useSelector(selectAreProductsLoading)
 
   const allUsers = useSelector(selectAllUsers)
   const allProducts = useSelector(selectAllProducts)
@@ -22,8 +29,6 @@ function App() {
   
   const productsFiltersSelected = useSelector(productsFiltersSelector.selectFilters)
 
-  console.log("Fil users ", usersFiltersSelected)
-  console.log("Fil products ", productsFiltersSelected)
 
   const handleAddUser = () => {
     dispatch(userActions.addUser({name: `User ${userCount}`}))
@@ -45,6 +50,7 @@ function App() {
 
   return (
     <div className="App">
+      <p>{`Loading? ${isLoading}`}</p>
       <p>{`All Users: ${allUsers.map(user => user.name)}`}</p>
       <p>{`All Products: ${allProducts.map(product => product.title)}`}</p>
       <p>{`Filtered Users: ${usersFiltersSelected.length}`}</p>

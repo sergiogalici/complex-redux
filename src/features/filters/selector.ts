@@ -1,7 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 
-export const createFiltersSelector = (reducerName: keyof Omit<RootState, "carts">) => ({
+export const createFiltersSelector = (reducerName: keyof Omit<RootState, "carts" | "loading">) => ({
     selectFilters: createSelector(
         (state: RootState) => state[reducerName].filters,
         (filters) => filters.selected

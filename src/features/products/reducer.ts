@@ -1,5 +1,5 @@
 import { ProductsState, ProductType } from "./model";
-import { PayloadAction } from "@reduxjs/toolkit"
+import { PayloadAction, createAction } from "@reduxjs/toolkit"
 import { createSliceWithFilters } from "../filters/reducer";
 
 const initialState: ProductsState = { allProducts: [] }
@@ -15,7 +15,8 @@ const productsSlice = createSliceWithFilters({
 })
 
 export const productActions = {
-    ...productsSlice.actions
+    ...productsSlice.actions,
+    fetchProducts: createAction("products/fetchProducts")
 }
 
 export const productsReducer = productsSlice.reducer
